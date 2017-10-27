@@ -1,0 +1,49 @@
+This repo was generated with combo-layer
+========================================
+Manuel Traut <manut@linutronix.de> 2017-10-17
+
+as used by yocto to generate poky.git from meta-oe meta-yocto-bsp, etc.
+
+  git://git.yoctoproject.org/poky-config
+
+initial setup
+-------------
+
+----
+$ git clone https://github.com/meta-debian/meta-debian.git meta-combo
+$ cd meta-combo
+$ mkdir meta-debian
+$ git mv bsp classes conf COPYING.MIT documentation files README.md recipes-* meta-debian/
+$ git commit -sam 'move meta debian subfolder'
+$ cat ../combo-layer.conf
+[elbe]
+local_repo_dir = ../nneta-elbe
+src_uri = https://github.com/linutronix/nneta-elbe.git
+dest_dir = meta-elbe
+last_revision =
+branch = master
+signed_off = false
+
+[debian]
+local_repo_dir = ../meta-debian
+src_uri = https://github.com/meta-debian/meta-debian.git
+dest_dir = meta-debian
+last_revision = ##RETRIVED FROM GIT; THE ONE BEFORE THE MOVE COMMIT##
+branch = morty
+signed_off = false
+$ ../combo-layer -c ../combo-layer.conf -n update
+$ mv meta-elbe/*.sample meta-elbe/conf/
+$ exit
+$ git add meta-elbe/conf/bblayers.conf.sample meta-elbe/conf/local.conf.sample
+$ git commit -sam 'fixup after combo-layer update for dropped mv commit'
+----
+
+updating
+--------
+
+once setuped, the repo can be synced with the upstream versions using this
+command:
+
+----
+$ ../combo-layer -c ../combo-layer.conf update
+----
